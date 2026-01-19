@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perodua - Your Dream Car Awaits</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Floating Navigation */
+        .floating-nav {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 15px 30px;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-item {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s;
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-logo {
+            font-weight: 800;
+            font-size: 18px;
+            background: linear-gradient(135deg, #ff0844, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Hero Section - Split Screen */
+        .hero-split {
+            height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
+        }
+
+        .hero-left {
+            background: linear-gradient(135deg, #ff0844 0%, #ff6b6b 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-left::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 8s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-50px, 50px); }
+        }
+
+        .hero-title {
+            font-size: 72px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-btn {
+            padding: 18px 40px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-primary {
+            background: #fff;
+            color: #ff0844;
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(255, 255, 255, 0.3);
+        }
+
+        .cta-secondary {
+            background: transparent;
+            color: #fff;
+            border: 2px solid #fff;
+        }
+
+        .cta-secondary:hover {
+            background: #fff;
+            color: #ff0844;
+        }
+
+        .hero-right {
+            background: #0a0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-car-display {
+            position: relative;
+            width: 80%;
+            height: 400px;
+            background: linear-gradient(135deg, rgba(255, 8, 68, 0.2), rgba(255, 107, 107, 0.2));
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            border: 2px solid rgba(255, 8, 68, 0.3);
+            animation: glow 3s infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 30px rgba(255, 8, 68, 0.3); }
+            50% { box-shadow: 0 0 60px rgba(255, 8, 68, 0.6); }
+        }
+
+        /* Contact Info Sidebar */
+        .contact-sidebar {
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px 0 0 20px;
+            padding: 30px 20px;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ff0844, #ff6b6b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .contact-icon:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 5px 20px rgba(255, 8, 68, 0.5);
+        }
+
+        /* Cars Gallery - Bento Grid */
+        .cars-section {
+            padding: 100px 60px;
+            background: #0a0a0a;
+        }
+
+        .section-header {
+            margin-bottom: 60px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255, 8, 68, 0.1);
+            border: 1px solid rgba(255, 8, 68, 0.3);
+            border-radius: 20px;
+            color: #ff6b6b;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        /* Bento Grid Layout */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(4, 200px);
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .bento-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .bento-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 8, 68, 0.5);
+        }
+
+        .bento-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff0844, #ff6b6b, #ff0844);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .bento-item:hover::before {
+            opacity: 1;
+        }
+
+        .item-large {
+            grid-column: span 3;
+            grid-row: span 2;
+        }
+
+        .item-medium {
+            grid-column: span 3;
+            grid-row: span 2;
+        }
+
+        .item-small {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .car-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .car-name-bento {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .car-price-bento {
+            font-size: 24px;
+            color: #ff6b6b;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .car-features-bento {
+            list-style: none;
+            font-size: 13px;
+            opacity: 0.7;
+            line-height: 1.8;
+        }
+
+        .quick-action {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #ff0844, #ff6b6b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            opacity: 0;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .bento-item:hover .quick-action {
+            opacity: 1;
+        }
+
+        /* Seller Card - Floating */
+        .seller-float {
+            padding: 100px 60px;
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .seller-card {
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 60px;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .seller-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 8, 68, 0.15), transparent);
+            border-radius: 50%;
+        }
+
+        .seller-avatar-section {
+            text-align: center;
+        }
+
+        .seller-avatar-large {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #ff0844, #ff6b6b);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            margin: 0 auto 30px;
+            box-shadow: 0 20px 60px rgba(255, 8, 68, 0.3);
+            transform: rotate(-5deg);
+            transition: transform 0.3s;
+        }
+
+        .seller-card:hover .seller-avatar-large {
+            transform: rotate(0deg);
+        }
+
+        .seller-name {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .seller-title {
+            color: #ff6b6b;
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        .seller-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .seller-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 800;
+            color: #ff6b6b;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+
+        .seller-perks {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .perk-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        .perk-icon {
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 8, 68, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        /* Message Form - Modal Style */
+        .message-section {
+            padding: 100px 60px;
+            background: #0a0a0a;
+        }
+
+        .message-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 50px;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .form-header h2 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .form-header p {
+            opacity: 0.7;
+            font-size: 16px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .form-field.full {
+            grid-column: span 2;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 600;
+            opacity: 0.8;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px 20px;
+            color: #fff;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-textarea {
+            resize: none;
+            height: 120px;
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #ff0844, #ff6b6b);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .form-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(255, 8, 68, 0.4);
+        }
+
+        .whatsapp-divider {
+            text-align: center;
+            margin: 30px 0 20px;
+            position: relative;
+        }
+
+        .whatsapp-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 0;
+        }
+
+        .whatsapp-divider span {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+            font-size: 14px;
+            opacity: 0.6;
+        }
+
+        .whatsapp-btn-large {
+            width: 100%;
+            padding: 20px;
+            background: #25D366;
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .whatsapp-btn-large:hover {
+            background: #1fb855;
+            transform: scale(1.02);
+        }
+
+        /* Footer - Minimal */
+        .footer {
+            background: #0a0a0a;
+            padding: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+        }
+
+        .footer-brand h3 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .footer-brand p {
+            opacity: 0.6;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .footer-section h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #fff;
+            text-decoration: none;
+            opacity: 0.6;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+            color: #ff6b6b;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            opacity: 0.4;
+            font-size: 13px;
+        }
+
+        /* Success Toast */
+        .toast {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            background: #25D366;
+            color: #fff;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(37, 211, 102, 0.3);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            gap: 15px;
+            font-weight: 600;
+            animation: slideInRight 0.3s;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.show {
+            display: flex;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .hero-split {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-right {
+                display: none;
+            }
+
+            .bento-grid {
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: auto;
+            }
+
+            .item-large,
+            .item-medium {
+                grid-column: span 4;
+            }
+
+            .item-small {
+                grid-column: span 4;
+            }
+
+            .seller-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .seller-stats,
+            .seller-perks {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .floating-nav {
+                width: 90%;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .hero-left {
+                padding: 0 30px;
+            }
+
+            .hero-title {
+                font-size: 42px;
+            }
+
+            .contact-sidebar {
+                display: none;
+            }
+
+            .cars-section,
+            .seller-float,
+            .message-section {
+                padding: 60px 20px;
+            }
+
+            .section-title {
+                font-size: 36px;
+            }
+
+            .bento-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+            }
+
+            .item-large,
+            .item-medium,
+            .item-small {
+                grid-column: span 1;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-field.full {
+                grid-column: span 1;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Navigation -->
+    <nav class="floating-nav">
+        <div class="nav-logo">PERODUA</div>
+        <a href="#home" class="nav-item">Home</a>
+        <a href="#cars" class="nav-item">Models</a>
+        <a href="#seller" class="nav-item">About Me</a>
+        <a href="#contact" class="nav-item">Contact</a>
+    </nav>
+
+    <!-- Contact Sidebar -->
+    <div class="contact-sidebar">
+        <a href="https://wa.me/60145818881" class="contact-icon" title="WhatsApp">💬</a>
+        <a href="tel:0145818881" class="contact-icon" title="Call">📞</a>
+        <a href="mailto:herwan@gmail.com" class="contact-icon" title="Email">✉️</a>
+        <a href="https://www.facebook.com" class="contact-icon" title="Facebook" target="_blank">📘</a>
+    </div>
+
+    <!-- Hero Split Screen -->
+    <section id="home" class="hero-split">
+        <div class="hero-left">
+            <div class="hero-title">Drive Your Dream Perodua Today</div>
+            <div class="hero-subtitle">Experience excellence with Malaysia's #1 car brand. Premium quality, unbeatable prices, exceptional service.</div>
+            <div class="cta-group">
+                <a href="#cars" class="cta-btn cta-primary">Explore Models</a>
+                <a href="https://wa.me/60145818881?text=Hi!%20I%20want%20to%20know%20more" class="cta-btn cta-secondary">Chat Now</a>
+            </div>
+        </div>
+        <div class="hero-right">
+            <div class="hero-car-display">🚗</div>
+        </div>
+    </section>
+
+    <!-- Cars Section - Bento Grid -->
+    <section id="cars" class="cars-section">
+        <div class="section-header">
+            <span class="section-tag">2026 COLLECTION</span>
+            <h2 class="section-title">Choose Your Perfect Ride</h2>
+        </div>
+
+        <div class="bento-grid">
+            <!-- Perodua Myvi -->
+            <div class="bento-item item-large" onclick="window.location.href='https://wa.me/60145818881?text=Interested%20in%20Myvi'">
+                <span class="car-icon">🚗</span>
+                <div class="car-name-bento">Myvi</div>
+                <div class="car-price-bento">RM 46,500</div>
+                <ul class="car-features-bento">
+                    <li>• 1.3L & 1.5L Engine</li>
+                    <li>• ASA 3.0 Safety</li>
+                    <li>• Best Seller Model</li>
+                </ul>
+                <a href="https://wa.me/60145818881?text=Interested%20in%20Myvi" class="quick-action">→</a>
+            </div>
+
+            <!-- Perodua Ativa -->
+            <div class="bento-item item-medium" onclick="window.location.href='https://wa.me/60145818881?text=Interested%20in%20Ativa'">
+                <span class="car-icon">🚙</span>
+                <div class="car-name-bento">Ativa</div>
+                <div class="car-price-bento">RM 66,700</div>
+                <ul class="car-features-bento">
+                    <li>• Premium SUV</li>
+                    <li>• 1.0L Turbo</li>
+                    <li>• 5-Star Safety</li>
+                </ul>
+                <a href="https://wa.me/60145818881?text=Interested%20in%20Ativa" class="quick-action">→</a>
+            </div>
+
+            <!-- Perodua Axia -->
+            <div class="bento-item item-small" onclick="window.location.href='https://wa.me/60145818881?text=Interested%20in%20Axia'">
+                <span class="car-icon">🚘</span>
+                <div class="car-name-bento">Axia</div>
+                <div class="car-price-bento">RM 24,090</div>
+                <ul class="car-features-bento">
+                    <li>• Most Affordable</li>
+                    <li>• Fuel Efficient</li>
+                </ul>
+                <a href="https://wa.me/60145818881?text=Interested%20in%20Axia" class="quick-action">→</a>
+            </div>
+
+            <!-- Perodua Bezza -->
+            <div class="bento-item item-small" onclick="window.location.href='https://wa.me/60145818881?text=Interested%20in%20Bezza'">
+                <span class="car-icon">🚗</span>
+                <div class="car-name-bento">Bezza</div>
+                <div class="car-price-bento">RM 37,580</div>
+                <ul class="car-features-bento">
+                    <li>• Spacious Sedan</li>
+                    <li>• 508L Boot</li>
+                </ul>
+                <a href="https://wa.me/60145818881?text=Interested%20in%20Bezza" class="quick-action">→</a>
+            </div>
+
+            <!-- Perodua Alza -->
+            <div class="bento-item item-small" onclick="window.location.href='https://wa.me/60145818881?text=Interested%20in%20Alza'">
+                <span class="car-icon">🚐</span>
+                <div class="car-name-bento">Alza</div>
+                <div class="car-price-bento">RM 62,500</div>
+                <ul class="car-features-bento">
+                    <li>• 7-Seater MPV</li>
+                    <li>• Family Perfect</li>
+                </ul>
+                <a href="https://wa.me/60145818881?text=Interested%20in%20Alza" class="quick-action">→</a>
+            </div>
+
+            <!-- Perodua Aruz -->
+            <div class="bento-item item-small" onclick="window.location.href='https://wa.me/60145818881?text=Interested%20in%20Aruz'">
+                <span class="car-icon">🚙</span>
+                <div class="car-name-bento">Aruz</div>
+                <div class="car-price-bento">RM 68,526</div>
+                <ul class="car-features-bento">
+                    <li>• 7-Seater SUV</li>
+                    <li>• Premium</li>
+                </ul>
+                <a href="https://wa.me/60145818881?text=Interested%20in%20Aruz" class="quick-action">→</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seller Floating Card -->
+    <section id="seller" class="seller-float">
+        <div class="seller-card">
+            <div class="seller-avatar-section">
+                <div class="seller-avatar-large">👨‍💼</div>
+                <div class="seller-name">Herwan</div>
+                <div class="seller-title">Authorized Perodua Consultant</div>
+            </div>
+            <div class="seller-details">
+                <div class="seller-stats">
+                    <div class="stat-box">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Happy Customers</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">5+</span>
+                        <span class="stat-label">Years Experience</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Satisfaction</span>
+                    </div>
+                </div>
+                <div class="seller-perks">
+                    <div class="perk-item">
+                        <div class="perk-icon">💰</div>
+                        <div>Best Price Guarantee</div>
+                    </div>
+                    <div class="perk-item">
+                        <div class="perk-icon">🔄</div>
+                        <div>Trade-In Welcome</div>
+                    </div>
+                    <div class="perk-item">
+                        <div class="perk-icon">✅</div>
+                        <div>Easy Loan Approval</div>
+                    </div>
+                    <div class="perk-item">
+                        <div class="perk-icon">🚗</div>
+                        <div>Free Test Drive</div>
+                    </div>
+                    <div class="perk-item">
+                        <div class="perk-icon">📱</div>
+                        <div>24/7 Support</div>
+                    </div>
+                    <div class="perk-item">
+                        <div class="perk-icon">🎁</div>
+                        <div>Special Promotions</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Message Section -->
+    <section id="contact" class="message-section">
+        <div class="message-container">
+            <div class="form-header">
+                <h2>Let's Talk About Your Dream Car</h2>
+                <p>Fill in the details and I'll get back to you ASAP</p>
+            </div>
+
+            <form id="contactForm">
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label class="form-label">Your Name</label>
+                        <input type="text" class="form-input" id="name" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" class="form-input" id="phone" placeholder="014-581-8881" required>
+                    </div>
+                    <div class="form-field full">
+                        <label class="form-label">Email (Optional)</label>
+                        <input type="email" class="form-input" id="email" placeholder="email@example.com">
+                    </div>
+                    <div class="form-field full">
+                        <label class="form-label">Interested Model</label>
+                        <select class="form-select" id="car" required>
+                            <option value="">Select a model</option>
+                            <option value="Myvi">Perodua Myvi</option>
+                            <option value="Axia">Perodua Axia</option>
+                            <option value="Ativa">Perodua Ativa</option>
+                            <option value="Bezza">Perodua Bezza</option>
+                            <option value="Alza">Perodua Alza</option>
+                            <option value="Aruz">Perodua Aruz</option>
+                        </select>
+                    </div>
+                    <div class="form-field full">
+                        <label class="form-label">Your Message</label>
+                        <textarea class="form-textarea" id="message" placeholder="Tell me more about your requirements..."></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="form-submit">Send Message 📤</button>
+            </form>
+
+            <div class="whatsapp-divider">
+                <span>Or reach me instantly</span>
+            </div>
+
+            <a href="https://wa.me/60145818881?text=Hi%20Herwan!%20I%20want%20to%20know%20more" class="whatsapp-btn-large">
+                <span>💬</span>
+                <span>WhatsApp Me Now</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>PERODUA</h3>
+                <p>Malaysia's #1 automotive brand. Building cars people trust since 1993. Your satisfaction is our priority.</p>
+                <div style="margin-top: 20px;">
+                    <p><strong>Herwan</strong></p>
+                    <p>📱 014-581 8881</p>
+                    <p>📧 herwan@gmail.com</p>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#cars">All Models</a></li>
+                    <li><a href="#seller">About Me</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Services</h4>
+                <ul class="footer-links">
+                    <li><a href="https://wa.me/60145818881?text=Trade-in">Trade-In</a></li>
+                    <li><a href="https://wa.me/60145818881?text=Loan">Loan Services</a></li>
+                    <li><a href="https://wa.me/60145818881?text=Test%20Drive">Test Drive</a></li>
+                    <li><a href="https://wa.me/60145818881?text=Promotion">Promotions</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <ul class="footer-links">
+                    <li><a href="https://www.facebook.com" target="_blank">Facebook</a></li>
+                    <li><a href="https://www.instagram.com" target="_blank">Instagram</a></li>
+                    <li><a href="https://www.tiktok.com" target="_blank">TikTok</a></li>
+                    <li><a href="https://wa.me/60145818881" target="_blank">WhatsApp</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2026 Perodua Damansara Damai. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <span style="font-size: 24px;">✅</span>
+        <span>Message sent! Redirecting to WhatsApp...</span>
+    </div>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const car = document.getElementById('car').value;
+            const message = document.getElementById('message').value;
+            
+            const whatsappMsg = `Hi Herwan!%0A%0A` +
+                `Name: ${encodeURIComponent(name)}%0A` +
+                `Phone: ${encodeURIComponent(phone)}%0A` +
+                (email ? `Email: ${encodeURIComponent(email)}%0A` : '') +
+                `Interested in: ${encodeURIComponent(car)}%0A%0A` +
+                `Message: ${encodeURIComponent(message || 'I want to know more')}`;
+            
+            // Show toast
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            
+            // Redirect after 2 seconds
+            setTimeout(() => {
+                window.open(`https://wa.me/60145818881?text=${whatsappMsg}`, '_blank');
+                toast.classList.remove('show');
+                document.getElementById('contactForm').reset();
+            }, 2000);
+        });
+
+        // Parallax effect on hero
+        document.addEventListener('mousemove', (e) => {
+            const heroDisplay = document.querySelector('.hero-car-display');
+            if (heroDisplay) {
+                const x = (e.clientX / window.innerWidth - 0.5) * 20;
+                const y = (e.clientY / window.innerHeight - 0.5) * 20;
+                heroDisplay.style.transform = `translate(${x}px, ${y}px)`;
+            }
+        });
+
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.bento-item, .seller-card, .message-container').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(50px)';
+            el.style.transition = 'opacity 0.6s, transform 0.6s';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
+
