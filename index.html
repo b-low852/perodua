@@ -73,7 +73,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 0 80px;
+            padding: 0 0 0 80px;
             position: relative;
             overflow: hidden;
         }
@@ -396,11 +396,11 @@
 
         /* Video Section */
         .video-section {
-            width: 100%;
+            width: calc(100% + 120px);
+            margin-left: -60px;
+            margin-right: -60px;
             margin-bottom: 60px;
-            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             position: relative;
         }
 
@@ -410,6 +410,14 @@
             display: block;
             max-height: 600px;
             object-fit: cover;
+        }
+
+        @media (max-width: 768px) {
+            .video-section {
+                width: calc(100% + 40px);
+                margin-left: -20px;
+                margin-right: -20px;
+            }
         }
 
         .section-header {
@@ -1098,7 +1106,7 @@
             }
 
             .hero-left {
-                padding: 0 30px;
+                padding: 0 0 0 30px;
             }
 
             .hero-title {
