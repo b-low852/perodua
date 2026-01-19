@@ -169,9 +169,16 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 120px;
             border: 2px solid rgba(255, 8, 68, 0.3);
             animation: glow 3s infinite;
+            overflow: hidden;
+        }
+
+        .hero-car-display img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 30px;
         }
 
         @keyframes glow {
@@ -843,7 +850,9 @@
             </div>
         </div>
         <div class="hero-right">
-            <div class="hero-car-display">🚗</div>
+            <div class="hero-car-display">
+                <img src="https://via.placeholder.com/800x600/ff0844/ffffff?text=Perodua+Car" alt="Perodua Car Banner">
+            </div>
         </div>
     </section>
 
