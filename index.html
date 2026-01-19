@@ -1204,8 +1204,8 @@
             <div class="wave-line"></div>
             <div class="wave-line"></div>
             
-            <div class="hero-title" id="heroTitle">Drive Your Dream Perodua Today</div>
-            <div class="hero-subtitle" id="heroSubtitle">Experience excellence with Malaysia's #1 car brand. Premium quality, unbeatable prices, exceptional service.</div>
+            <div class="hero-title" id="heroTitle">Loading...</div>
+            <div class="hero-subtitle" id="heroSubtitle">Please wait while we load the content...</div>
             <div class="cta-group">
                 <a href="#cars" class="cta-btn cta-primary">Explore Models</a>
                 <a href="https://wa.me/60145818881?text=Hi!%20I%20want%20to%20know%20more" class="cta-btn cta-secondary">Chat Now</a>
@@ -1441,7 +1441,7 @@
         window.firestoreDoc = doc;
         window.firestoreGetDoc = getDoc;
 
-        // Load banner data from Firebase
+        // Load banner data from Firebase (optimized for fast loading)
         async function loadBanner() {
             try {
                 const bannerDoc = await getDoc(doc(db, 'admin', 'banner'));
@@ -1464,11 +1464,20 @@
                     console.log('Banner data loaded successfully from Firebase!');
                 } else {
                     console.log('Banner document not found in Firebase');
+                    // Set default values if document not found
+                    document.getElementById('heroTitle').textContent = 'Drive Your Dream Perodua Today';
+                    document.getElementById('heroSubtitle').textContent = "Experience excellence with Malaysia's #1 car brand. Premium quality, unbeatable prices, exceptional service.";
                 }
             } catch (error) {
-                    console.error('Error loading banner:', error);
+                console.error('Error loading banner:', error);
+                // Set default values on error
+                document.getElementById('heroTitle').textContent = 'Drive Your Dream Perodua Today';
+                document.getElementById('heroSubtitle').textContent = "Experience excellence with Malaysia's #1 car brand. Premium quality, unbeatable prices, exceptional service.";
             }
         }
+
+        // Load banner immediately when Firebase is ready (before DOM loads)
+        loadBanner();
 
         // Load personal info from Firebase
         async function loadPersonalInfo() {
@@ -1578,9 +1587,9 @@
             }
         }
 
-        // Load banner, personal info, and cars when page loads
+        // Load personal info and cars when DOM is ready
+        // Note: Banner loads immediately when Firebase initializes (above)
         window.addEventListener('DOMContentLoaded', () => {
-            loadBanner();
             loadPersonalInfo();
             loadCars();
         });
