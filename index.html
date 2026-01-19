@@ -394,6 +394,24 @@
             background: #0a0a0a;
         }
 
+        /* Video Section */
+        .video-section {
+            width: 100%;
+            margin-bottom: 60px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .video-section video {
+            width: 100%;
+            height: auto;
+            display: block;
+            max-height: 600px;
+            object-fit: cover;
+        }
+
         .section-header {
             margin-bottom: 60px;
         }
@@ -907,6 +925,131 @@
             display: flex;
         }
 
+        /* Success Popup Modal */
+        .success-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10001;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .success-popup.show {
+            display: flex;
+        }
+
+        .success-popup-content {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 2px solid rgba(255, 8, 68, 0.5);
+            border-radius: 30px;
+            padding: 50px 60px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(255, 8, 68, 0.4);
+            animation: popIn 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .success-popup-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 8, 68, 0.3), transparent);
+            border-radius: 50%;
+        }
+
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: scaleIn 0.5s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .success-popup h2 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #fff;
+            position: relative;
+            z-index: 1;
+        }
+
+        .success-popup p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 30px;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .success-popup-btn {
+            background: linear-gradient(135deg, #ff0844, #ff6b6b);
+            color: #fff;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+
+        .success-popup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 8, 68, 0.5);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.7);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
         /* Responsive */
         @media (max-width: 1200px) {
             .hero-split {
@@ -1058,6 +1201,13 @@
 
     <!-- Cars Section - Bento Grid -->
     <section id="cars" class="cars-section">
+        <div class="video-section">
+            <video autoplay loop muted playsinline>
+                <source src="perodua.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
         <div class="section-header">
             <span class="section-tag">2026 COLLECTION</span>
             <h2 class="section-title">Choose Your Perfect Ride</h2>
@@ -1157,7 +1307,7 @@
                         <span class="stat-label">Happy Customers</span>
                     </div>
                     <div class="stat-box">
-                        <span class="stat-number">5+</span>
+                        <span class="stat-number">17+</span>
                         <span class="stat-label">Years Experience</span>
                     </div>
                     <div class="stat-box">
@@ -1299,6 +1449,45 @@
         <span>Message sent! Redirecting to WhatsApp...</span>
     </div>
 
+    <!-- Success Popup Modal -->
+    <div id="successPopup" class="success-popup">
+        <div class="success-popup-content">
+            <div class="success-icon">✅</div>
+            <h2>Message Sent Successfully!</h2>
+            <p>Your message has been saved and we'll get back to you soon. Opening WhatsApp now...</p>
+            <button class="success-popup-btn" onclick="closeSuccessPopup()">Got it!</button>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAaeDEqg9Bqiew3LaMX5LWG8AWnoVbaO_c",
+            authDomain: "perodua-2bab4.firebaseapp.com",
+            projectId: "perodua-2bab4",
+            storageBucket: "perodua-2bab4.firebasestorage.app",
+            messagingSenderId: "491719396095",
+            appId: "1:491719396095:web:fd8549baf741d896f85aca",
+            measurementId: "G-7D18ZMW4BT"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        // Make db available globally
+        window.firestoreDB = db;
+        window.firestoreAddDoc = addDoc;
+        window.firestoreCollection = collection;
+    </script>
+
     <script>
         // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -1312,7 +1501,7 @@
         });
 
         // Form submission
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const name = document.getElementById('name').value;
@@ -1321,6 +1510,22 @@
             const car = document.getElementById('car').value;
             const message = document.getElementById('message').value;
             
+            // Save to Firebase Firestore
+            try {
+                await window.firestoreAddDoc(window.firestoreCollection(window.firestoreDB, 'contacts'), {
+                    name: name,
+                    phone: phone,
+                    email: email || '',
+                    interestedModel: car,
+                    message: message || 'I want to know more',
+                    timestamp: new Date().toISOString(),
+                    status: 'new'
+                });
+                console.log('Data saved to Firebase successfully!');
+            } catch (error) {
+                console.error('Error saving to Firebase:', error);
+            }
+            
             const whatsappMsg = `Hi Herwan!%0A%0A` +
                 `Name: ${encodeURIComponent(name)}%0A` +
                 `Phone: ${encodeURIComponent(phone)}%0A` +
@@ -1328,16 +1533,30 @@
                 `Interested in: ${encodeURIComponent(car)}%0A%0A` +
                 `Message: ${encodeURIComponent(message || 'I want to know more')}`;
             
-            // Show toast
-            const toast = document.getElementById('toast');
-            toast.classList.add('show');
+            // Show success popup
+            const successPopup = document.getElementById('successPopup');
+            successPopup.classList.add('show');
             
-            // Redirect after 2 seconds
+            // Reset form
+            document.getElementById('contactForm').reset();
+            
+            // Open WhatsApp after 1.5 seconds
             setTimeout(() => {
                 window.open(`https://wa.me/60145818881?text=${whatsappMsg}`, '_blank');
-                toast.classList.remove('show');
-                document.getElementById('contactForm').reset();
-            }, 2000);
+            }, 1500);
+        });
+
+        // Close success popup function
+        function closeSuccessPopup() {
+            const successPopup = document.getElementById('successPopup');
+            successPopup.classList.remove('show');
+        }
+
+        // Close popup when clicking outside
+        document.getElementById('successPopup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSuccessPopup();
+            }
         });
 
         // Parallax effect on hero
