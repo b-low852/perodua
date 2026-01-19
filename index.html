@@ -69,7 +69,7 @@
         }
 
         .hero-left {
-            background: linear-gradient(135deg, #ff0844 0%, #ff6b6b 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -81,13 +81,32 @@
         .hero-left::before {
             content: '';
             position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, transparent 30%, rgba(255, 8, 68, 0.1) 30%, rgba(255, 8, 68, 0.1) 70%, transparent 70%),
+                linear-gradient(-45deg, transparent 30%, rgba(255, 107, 107, 0.05) 30%, rgba(255, 107, 107, 0.05) 70%, transparent 70%);
+            background-size: 60px 60px;
+            animation: slidePattern 20s linear infinite;
+        }
+
+        .hero-left::after {
+            content: '';
+            position: absolute;
             top: -50%;
-            right: -50%;
-            width: 500px;
-            height: 500px;
-            background: rgba(255, 255, 255, 0.1);
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 8, 68, 0.3) 0%, transparent 70%);
             border-radius: 50%;
-            animation: float 8s infinite;
+            animation: float 8s infinite ease-in-out;
+        }
+
+        @keyframes slidePattern {
+            0% { transform: translateX(0) translateY(0); }
+            100% { transform: translateX(60px) translateY(60px); }
         }
 
         @keyframes float {
@@ -408,11 +427,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 80px;
             margin: 0 auto 30px;
             box-shadow: 0 20px 60px rgba(255, 8, 68, 0.3);
             transform: rotate(-5deg);
             transition: transform 0.3s;
+            overflow: hidden;
+        }
+
+        .seller-avatar-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 30px;
         }
 
         .seller-card:hover .seller-avatar-large {
@@ -952,7 +978,9 @@
     <section id="seller" class="seller-float">
         <div class="seller-card">
             <div class="seller-avatar-section">
-                <div class="seller-avatar-large">👨‍💼</div>
+                <div class="seller-avatar-large">
+                    <img src="herwan.jpeg" alt="Herwan - Authorized Perodua Consultant">
+                </div>
                 <div class="seller-name">Herwan</div>
                 <div class="seller-title">Authorized Perodua Consultant</div>
             </div>
