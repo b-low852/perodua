@@ -81,15 +81,26 @@
         .hero-left::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: -100%;
+            left: -100%;
+            right: -100%;
+            bottom: -100%;
             background: 
-                linear-gradient(45deg, transparent 30%, rgba(255, 8, 68, 0.1) 30%, rgba(255, 8, 68, 0.1) 70%, transparent 70%),
-                linear-gradient(-45deg, transparent 30%, rgba(255, 107, 107, 0.05) 30%, rgba(255, 107, 107, 0.05) 70%, transparent 70%);
-            background-size: 60px 60px;
-            animation: slidePattern 20s linear infinite;
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 40px,
+                    rgba(255, 8, 68, 0.08) 40px,
+                    rgba(255, 8, 68, 0.08) 80px
+                ),
+                repeating-linear-gradient(
+                    -45deg,
+                    transparent,
+                    transparent 40px,
+                    rgba(255, 107, 107, 0.05) 40px,
+                    rgba(255, 107, 107, 0.05) 80px
+                );
+            animation: slidePattern 15s linear infinite;
         }
 
         .hero-left::after {
@@ -99,19 +110,155 @@
             right: -20%;
             width: 600px;
             height: 600px;
-            background: radial-gradient(circle, rgba(255, 8, 68, 0.3) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255, 8, 68, 0.4) 0%, rgba(255, 107, 107, 0.2) 30%, transparent 70%);
             border-radius: 50%;
-            animation: float 8s infinite ease-in-out;
+            animation: floatGlow 6s infinite ease-in-out;
         }
 
         @keyframes slidePattern {
-            0% { transform: translateX(0) translateY(0); }
-            100% { transform: translateX(60px) translateY(60px); }
+            0% { 
+                transform: translateX(0) translateY(0);
+            }
+            100% { 
+                transform: translateX(80px) translateY(80px);
+            }
         }
 
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(-50px, 50px); }
+        @keyframes floatGlow {
+            0%, 100% { 
+                transform: translate(0, 0) scale(1);
+                opacity: 0.6;
+            }
+            50% { 
+                transform: translate(-80px, 80px) scale(1.2);
+                opacity: 0.8;
+            }
+        }
+
+        /* Additional animated background elements */
+        .bg-orb-1, .bg-orb-2, .bg-orb-3 {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .bg-orb-1 {
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 8, 68, 0.3);
+            top: 10%;
+            left: -10%;
+            animation: floatOrb1 20s infinite ease-in-out;
+        }
+
+        .bg-orb-2 {
+            width: 300px;
+            height: 300px;
+            background: rgba(15, 52, 96, 0.5);
+            bottom: 20%;
+            left: 30%;
+            animation: floatOrb2 15s infinite ease-in-out;
+        }
+
+        .bg-orb-3 {
+            width: 350px;
+            height: 350px;
+            background: rgba(255, 107, 107, 0.25);
+            top: 40%;
+            right: 10%;
+            animation: floatOrb3 18s infinite ease-in-out;
+        }
+
+        @keyframes floatOrb1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(100px, -80px) scale(1.2); }
+            66% { transform: translate(-50px, 100px) scale(0.9); }
+        }
+
+        @keyframes floatOrb2 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-120px, -60px) rotate(180deg); }
+        }
+
+        @keyframes floatOrb3 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(-70px, 90px) scale(1.15); }
+            50% { transform: translate(50px, -50px) scale(0.85); }
+            75% { transform: translate(-90px, -70px) scale(1.1); }
+        }
+
+        /* Particle dots */
+        .bg-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            animation: floatParticle 10s infinite ease-in-out;
+        }
+
+        .particle:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; animation-duration: 12s; }
+        .particle:nth-child(2) { left: 25%; top: 60%; animation-delay: 2s; animation-duration: 10s; }
+        .particle:nth-child(3) { left: 50%; top: 30%; animation-delay: 4s; animation-duration: 14s; }
+        .particle:nth-child(4) { left: 70%; top: 70%; animation-delay: 1s; animation-duration: 11s; }
+        .particle:nth-child(5) { left: 85%; top: 40%; animation-delay: 3s; animation-duration: 13s; }
+        .particle:nth-child(6) { left: 40%; top: 80%; animation-delay: 5s; animation-duration: 15s; }
+        .particle:nth-child(7) { left: 60%; top: 15%; animation-delay: 2.5s; animation-duration: 12s; }
+        .particle:nth-child(8) { left: 15%; top: 50%; animation-delay: 4.5s; animation-duration: 10s; }
+
+        @keyframes floatParticle {
+            0%, 100% { 
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% { 
+                transform: translateY(-100px) translateX(50px);
+                opacity: 0;
+            }
+        }
+
+        /* Wave effect */
+        .wave-line {
+            position: absolute;
+            width: 200%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 8, 68, 0.4), transparent);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .wave-line:nth-child(1) {
+            top: 30%;
+            animation: waveMove 8s infinite linear;
+        }
+
+        .wave-line:nth-child(2) {
+            top: 60%;
+            animation: waveMove 10s infinite linear reverse;
+            animation-delay: 2s;
+        }
+
+        @keyframes waveMove {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0%); }
         }
 
         .hero-title {
@@ -870,12 +1017,31 @@
         <a href="https://wa.me/60145818881" class="contact-icon" title="WhatsApp">💬</a>
         <a href="tel:0145818881" class="contact-icon" title="Call">📞</a>
         <a href="mailto:herwan@gmail.com" class="contact-icon" title="Email">✉️</a>
-        <a href="https://www.facebook.com" class="contact-icon" title="Facebook" target="_blank">📘</a>
+        <a href="https://www.facebook.com/share/16v5c4bRjG/" class="contact-icon" title="Facebook" target="_blank">📘</a>
     </div>
 
     <!-- Hero Split Screen -->
     <section id="home" class="hero-split">
         <div class="hero-left">
+            <!-- Animated background elements -->
+            <div class="bg-orb-1"></div>
+            <div class="bg-orb-2"></div>
+            <div class="bg-orb-3"></div>
+            
+            <div class="bg-particles">
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+            </div>
+            
+            <div class="wave-line"></div>
+            <div class="wave-line"></div>
+            
             <div class="hero-title">Drive Your Dream Perodua Today</div>
             <div class="hero-subtitle">Experience excellence with Malaysia's #1 car brand. Premium quality, unbeatable prices, exceptional service.</div>
             <div class="cta-group">
@@ -1115,7 +1281,7 @@
             <div class="footer-section">
                 <h4>Connect</h4>
                 <ul class="footer-links">
-                    <li><a href="https://www.facebook.com" target="_blank">Facebook</a></li>
+                    <li><a href="https://www.facebook.com/share/16v5c4bRjG/" target="_blank">Facebook</a></li>
                     <li><a href="https://www.instagram.com" target="_blank">Instagram</a></li>
                     <li><a href="https://www.tiktok.com" target="_blank">TikTok</a></li>
                     <li><a href="https://wa.me/60145818881" target="_blank">WhatsApp</a></li>
