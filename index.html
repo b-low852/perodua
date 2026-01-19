@@ -1106,11 +1106,22 @@
             }
 
             .hero-left {
-                padding: 0 0 0 30px;
+                padding: 0 30px;
+                text-align: center;
+                align-items: center;
             }
 
             .hero-title {
                 font-size: 42px;
+            }
+
+            .hero-subtitle {
+                text-align: center;
+            }
+
+            .cta-group {
+                justify-content: center;
+                flex-wrap: wrap;
             }
 
             .contact-sidebar {
@@ -1193,8 +1204,8 @@
             <div class="wave-line"></div>
             <div class="wave-line"></div>
             
-            <div class="hero-title">Drive Your Dream Perodua Today</div>
-            <div class="hero-subtitle">Experience excellence with Malaysia's #1 car brand. Premium quality, unbeatable prices, exceptional service.</div>
+            <div class="hero-title" id="heroTitle">Drive Your Dream Perodua Today</div>
+            <div class="hero-subtitle" id="heroSubtitle">Experience excellence with Malaysia's #1 car brand. Premium quality, unbeatable prices, exceptional service.</div>
             <div class="cta-group">
                 <a href="#cars" class="cta-btn cta-primary">Explore Models</a>
                 <a href="https://wa.me/60145818881?text=Hi!%20I%20want%20to%20know%20more" class="cta-btn cta-secondary">Chat Now</a>
@@ -1221,79 +1232,11 @@
             <h2 class="section-title">Choose Your Perfect Ride</h2>
         </div>
 
-        <div class="bento-grid">
-            <!-- Perodua Myvi -->
-            <div class="bento-item item-large" onclick="window.location.href='https://wa.me/60145818881?text=Interested%20in%20Myvi'">
-                <img src="pero.png" alt="Myvi" class="car-icon">
-                <div class="car-name-bento">Myvi</div>
-                <div class="car-price-bento">RM 46,500</div>
-                <ul class="car-features-bento">
-                    <li>• 1.3L & 1.5L Engine</li>
-                    <li>• ASA 3.0 Safety</li>
-                    <li>• Best Seller Model</li>
-                </ul>
-                <a href="https://wa.me/60145818881?text=Interested%20in%20Myvi" class="quick-action">→</a>
-            </div>
-
-            <!-- Perodua Ativa -->
-            <div class="bento-item item-medium" onclick="window.location.href='https://wa.me/60145818881?text=Interested%20in%20Ativa'">
-                <img src="pero.png" alt="Ativa" class="car-icon">
-                <div class="car-name-bento">Ativa</div>
-                <div class="car-price-bento">RM 66,700</div>
-                <ul class="car-features-bento">
-                    <li>• Premium SUV</li>
-                    <li>• 1.0L Turbo</li>
-                    <li>• 5-Star Safety</li>
-                </ul>
-                <a href="https://wa.me/60145818881?text=Interested%20in%20Ativa" class="quick-action">→</a>
-            </div>
-
-            <!-- Perodua Axia -->
-            <div class="bento-item item-small" onclick="window.location.href='https://wa.me/60145818881?text=Interested%20in%20Axia'">
-                <img src="pero.png" alt="Axia" class="car-icon">
-                <div class="car-name-bento">Axia</div>
-                <div class="car-price-bento">RM 24,090</div>
-                <ul class="car-features-bento">
-                    <li>• Most Affordable</li>
-                    <li>• Fuel Efficient</li>
-                </ul>
-                <a href="https://wa.me/60145818881?text=Interested%20in%20Axia" class="quick-action">→</a>
-            </div>
-
-            <!-- Perodua Bezza -->
-            <div class="bento-item item-small" onclick="window.location.href='https://wa.me/60145818881?text=Interested%20in%20Bezza'">
-                <img src="pero.png" alt="Bezza" class="car-icon">
-                <div class="car-name-bento">Bezza</div>
-                <div class="car-price-bento">RM 37,580</div>
-                <ul class="car-features-bento">
-                    <li>• Spacious Sedan</li>
-                    <li>• 508L Boot</li>
-                </ul>
-                <a href="https://wa.me/60145818881?text=Interested%20in%20Bezza" class="quick-action">→</a>
-            </div>
-
-            <!-- Perodua Alza -->
-            <div class="bento-item item-small" onclick="window.location.href='https://wa.me/60145818881?text=Interested%20in%20Alza'">
-                <img src="pero.png" alt="Alza" class="car-icon">
-                <div class="car-name-bento">Alza</div>
-                <div class="car-price-bento">RM 62,500</div>
-                <ul class="car-features-bento">
-                    <li>• 7-Seater MPV</li>
-                    <li>• Family Perfect</li>
-                </ul>
-                <a href="https://wa.me/60145818881?text=Interested%20in%20Alza" class="quick-action">→</a>
-            </div>
-
-            <!-- Perodua Aruz -->
-            <div class="bento-item item-small" onclick="window.location.href='https://wa.me/60145818881?text=Interested%20in%20Aruz'">
-                <img src="pero.png" alt="Aruz" class="car-icon">
-                <div class="car-name-bento">Aruz</div>
-                <div class="car-price-bento">RM 68,526</div>
-                <ul class="car-features-bento">
-                    <li>• 7-Seater SUV</li>
-                    <li>• Premium</li>
-                </ul>
-                <a href="https://wa.me/60145818881?text=Interested%20in%20Aruz" class="quick-action">→</a>
+        <div class="bento-grid" id="carsGrid">
+            <!-- Cars will be loaded from Firebase -->
+            <div style="grid-column: span 6; text-align: center; padding: 60px; color: rgba(255, 255, 255, 0.6);">
+                <div style="font-size: 48px; margin-bottom: 20px;">🚗</div>
+                <div>Loading cars from database...</div>
             </div>
         </div>
     </section>
@@ -1303,10 +1246,10 @@
         <div class="seller-card">
             <div class="seller-avatar-section">
                 <div class="seller-avatar-large">
-                    <img src="herwan.jpeg" alt="Herwan - Authorized Perodua Consultant">
+                    <img id="sellerImage" src="herwan.jpeg" alt="Herwan - Authorized Perodua Consultant">
                 </div>
-                <div class="seller-name">Herwan</div>
-                <div class="seller-title">Authorized Perodua Consultant</div>
+                <div class="seller-name" id="sellerName">Herwan</div>
+                <div class="seller-title" id="sellerTitle">Authorized Perodua Consultant</div>
             </div>
             <div class="seller-details">
                 <div class="seller-stats">
@@ -1413,7 +1356,7 @@
                 <h3>PERODUA</h3>
                 <p>Malaysia's #1 automotive brand. Building cars people trust since 1993. Your satisfaction is our priority.</p>
                 <div style="margin-top: 20px;">
-                    <p><strong>Herwan</strong></p>
+                    <p><strong id="footerName">Herwan</strong></p>
                     <p>📱 014-581 8881</p>
                     <p>📧 herwan@gmail.com</p>
                 </div>
@@ -1471,7 +1414,7 @@
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
 
         // Your web app's Firebase configuration
@@ -1494,6 +1437,153 @@
         window.firestoreDB = db;
         window.firestoreAddDoc = addDoc;
         window.firestoreCollection = collection;
+        window.firestoreGetDocs = getDocs;
+        window.firestoreDoc = doc;
+        window.firestoreGetDoc = getDoc;
+
+        // Load banner data from Firebase
+        async function loadBanner() {
+            try {
+                const bannerDoc = await getDoc(doc(db, 'admin', 'banner'));
+                
+                if (bannerDoc.exists()) {
+                    const bannerData = bannerDoc.data();
+                    
+                    // Update title
+                    const titleElement = document.getElementById('heroTitle');
+                    if (titleElement && bannerData.title) {
+                        titleElement.textContent = bannerData.title;
+                    }
+                    
+                    // Update subtitle
+                    const subtitleElement = document.getElementById('heroSubtitle');
+                    if (subtitleElement && bannerData.subtitle) {
+                        subtitleElement.textContent = bannerData.subtitle;
+                    }
+                    
+                    console.log('Banner data loaded successfully from Firebase!');
+                } else {
+                    console.log('Banner document not found in Firebase');
+                }
+            } catch (error) {
+                    console.error('Error loading banner:', error);
+            }
+        }
+
+        // Load personal info from Firebase
+        async function loadPersonalInfo() {
+            try {
+                const personalInfoDoc = await getDoc(doc(db, 'admin', 'personalInfo'));
+                
+                if (personalInfoDoc.exists()) {
+                    const personalData = personalInfoDoc.data();
+                    
+                    // Update seller name
+                    const sellerNameElement = document.getElementById('sellerName');
+                    if (sellerNameElement && personalData.name) {
+                        sellerNameElement.textContent = personalData.name;
+                    }
+                    
+                    // Update seller title
+                    const sellerTitleElement = document.getElementById('sellerTitle');
+                    if (sellerTitleElement && personalData.title) {
+                        sellerTitleElement.textContent = personalData.title;
+                    }
+                    
+                    // Update seller image
+                    const sellerImageElement = document.getElementById('sellerImage');
+                    if (sellerImageElement && personalData.image) {
+                        sellerImageElement.src = personalData.image;
+                        sellerImageElement.alt = `${personalData.name || 'Herwan'} - ${personalData.title || 'Authorized Perodua Consultant'}`;
+                        // Fallback to herwan.jpeg if image fails to load
+                        sellerImageElement.onerror = function() {
+                            this.src = 'herwan.jpeg';
+                        };
+                    }
+                    
+                    // Update footer name
+                    const footerNameElement = document.getElementById('footerName');
+                    if (footerNameElement && personalData.name) {
+                        footerNameElement.textContent = personalData.name;
+                    }
+                    
+                    console.log('Personal info loaded successfully from Firebase!');
+                } else {
+                    console.log('Personal info document not found in Firebase');
+                }
+            } catch (error) {
+                console.error('Error loading personal info:', error);
+            }
+        }
+
+        // Load cars from Firebase
+        async function loadCars() {
+            const carsGrid = document.getElementById('carsGrid');
+            
+            try {
+                const querySnapshot = await getDocs(collection(db, 'cars'));
+                
+                if (querySnapshot.empty) {
+                    carsGrid.innerHTML = '<div style="grid-column: span 6; text-align: center; padding: 60px; color: rgba(255, 255, 255, 0.6);">No cars found in database</div>';
+                    return;
+                }
+
+                carsGrid.innerHTML = ''; // Clear loading message
+                
+                querySnapshot.forEach((doc) => {
+                    const car = doc.data();
+                    const carName = car.name || 'Unknown';
+                    const carPrice = car.price || '0';
+                    const carImage = car.image || 'pero.png';
+                    const features = car.features || [];
+                    
+                    // Determine grid size (you can customize this logic)
+                    let sizeClass = 'item-small';
+                    if (querySnapshot.size <= 2) {
+                        sizeClass = 'item-large';
+                    } else if (querySnapshot.docs.indexOf(doc) < 2) {
+                        sizeClass = querySnapshot.docs.indexOf(doc) === 0 ? 'item-large' : 'item-medium';
+                    }
+                    
+                    // Create car card
+                    const carCard = document.createElement('div');
+                    carCard.className = `bento-item ${sizeClass}`;
+                    carCard.onclick = () => window.location.href = `https://wa.me/60145818881?text=Interested%20in%20${encodeURIComponent(carName)}`;
+                    
+                    // Build features list
+                    let featuresHTML = '';
+                    if (features.length > 0) {
+                        featuresHTML = '<ul class="car-features-bento">';
+                        features.forEach(feature => {
+                            featuresHTML += `<li>• ${feature}</li>`;
+                        });
+                        featuresHTML += '</ul>';
+                    }
+                    
+                    carCard.innerHTML = `
+                        <img src="${carImage}" alt="${carName}" class="car-icon" onerror="this.src='pero.png'">
+                        <div class="car-name-bento">${carName}</div>
+                        <div class="car-price-bento">RM ${carPrice}</div>
+                        ${featuresHTML}
+                        <a href="https://wa.me/60145818881?text=Interested%20in%20${encodeURIComponent(carName)}" class="quick-action">→</a>
+                    `;
+                    
+                    carsGrid.appendChild(carCard);
+                });
+                
+                console.log('Cars loaded successfully from Firebase!');
+            } catch (error) {
+                console.error('Error loading cars:', error);
+                carsGrid.innerHTML = '<div style="grid-column: span 6; text-align: center; padding: 60px; color: rgba(255, 8, 68, 0.8);">Error loading cars. Please refresh the page.</div>';
+            }
+        }
+
+        // Load banner, personal info, and cars when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            loadBanner();
+            loadPersonalInfo();
+            loadCars();
+        });
     </script>
 
     <script>
