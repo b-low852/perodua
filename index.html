@@ -1267,6 +1267,45 @@
             }
         }
 
+        /* iPad and Tablet Styles */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .hero-split {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-right {
+                display: none;
+            }
+
+            .hero-left {
+                padding: 0 60px;
+                text-align: left;
+                align-items: flex-start;
+                background-image: url('herwan.jpeg');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                position: relative;
+                min-height: 100vh;
+            }
+
+            .hero-left::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(255, 255, 255, 0.85);
+                z-index: 0;
+            }
+
+            .hero-left > * {
+                position: relative;
+                z-index: 1;
+            }
+        }
+
         @media (max-width: 768px) {
             .floating-nav {
                 padding: 15px 20px;
