@@ -665,6 +665,195 @@
             }
         }
 
+        /* Car Delivered Photos Gallery */
+        .delivered-photos-section {
+            padding: 100px 60px;
+            background: #ffffff;
+        }
+
+        .photos-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .photo-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            aspect-ratio: 4/3;
+            background: #f5f5f5;
+            transition: all 0.3s;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .photo-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 8, 68, 0.3);
+            border-color: #ff0844;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .photo-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+            padding: 20px;
+            color: #fff;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .photo-item:hover .photo-overlay {
+            opacity: 1;
+        }
+
+        .photo-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .photo-date {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        /* Lightbox Modal */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255, 8, 68, 0.8);
+            border-color: #ff0844;
+            transform: rotate(90deg);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .lightbox-nav:hover {
+            background: rgba(255, 8, 68, 0.8);
+            border-color: #ff0844;
+        }
+
+        .lightbox-prev {
+            left: -70px;
+        }
+
+        .lightbox-next {
+            right: -70px;
+        }
+
+        @media (max-width: 768px) {
+            .delivered-photos-section {
+                padding: 60px 20px;
+            }
+
+            .photos-gallery {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+            }
+
+            .lightbox-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+
+            .lightbox-prev {
+                left: 10px;
+            }
+
+            .lightbox-next {
+                right: 10px;
+            }
+
+            .lightbox-close {
+                top: 10px;
+                right: 10px;
+            }
+        }
+
         /* Seller Card - Floating */
         .seller-float {
             padding: 100px 60px;
@@ -1440,6 +1629,7 @@
         <div class="nav-items" id="navItems">
             <a href="#home" class="nav-item">Home</a>
             <a href="#cars" class="nav-item">Models</a>
+            <a href="#delivered-photos" class="nav-item">Delivered</a>
             <a href="#seller" class="nav-item">About Me</a>
             <a href="#contact" class="nav-item">Contact</a>
         </div>
@@ -1518,6 +1708,32 @@
             </div>
         </div>
     </section>
+
+    <!-- Car Delivered Photos Section -->
+    <section id="delivered-photos" class="delivered-photos-section">
+        <div class="section-header">
+            <span class="section-tag">SUCCESS STORIES</span>
+            <h2 class="section-title">Cars Delivered</h2>
+            <p style="font-size: 18px; color: #666; max-width: 600px; margin: 0 auto; text-align: center;">Click on any photo to view in full size</p>
+        </div>
+        <div class="photos-gallery" id="photosGallery">
+            <!-- Photos will be loaded from Firebase -->
+            <div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: #666;">
+                <div style="font-size: 48px; margin-bottom: 20px;">📸</div>
+                <div>Loading gallery photos from database...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close" id="lightboxClose">&times;</button>
+            <button class="lightbox-nav lightbox-prev" id="lightboxPrev">&#8249;</button>
+            <img id="lightboxImage" src="" alt="Delivered Car">
+            <button class="lightbox-nav lightbox-next" id="lightboxNext">&#8250;</button>
+        </div>
+    </div>
 
     <!-- Seller Floating Card -->
     <section id="seller" class="seller-float">
@@ -1664,6 +1880,7 @@
                 <ul class="footer-links">
                     <li><a href="#home">Home</a></li>
                     <li><a href="#cars">All Models</a></li>
+                    <li><a href="#delivered-photos">Delivered Cars</a></li>
                     <li><a href="#seller">About Me</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
@@ -1884,11 +2101,94 @@
             }
         }
 
+        // Load gallery photos from Firebase
+        async function loadGallery() {
+            const photosGallery = document.getElementById('photosGallery');
+            
+            try {
+                const querySnapshot = await getDocs(collection(db, 'gallery'));
+                
+                if (querySnapshot.empty) {
+                    photosGallery.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: #666;">No gallery photos found in database</div>';
+                    return;
+                }
+
+                photosGallery.innerHTML = ''; // Clear loading message
+                
+                // Collect all images from all documents
+                let allImages = [];
+                
+                querySnapshot.forEach((doc) => {
+                    const galleryData = doc.data();
+                    const images = galleryData.images || [];
+                    const createdAt = galleryData.createdAt || null;
+                    const title = galleryData.title || galleryData.carModel || 'Delivered Car';
+                    
+                    // Add each image with metadata
+                    images.forEach((imageData, index) => {
+                        allImages.push({
+                            image: imageData,
+                            title: title,
+                            createdAt: createdAt,
+                            docId: doc.id,
+                            index: index
+                        });
+                    });
+                });
+                
+                // Sort by createdAt (most recent first) if available
+                allImages.sort((a, b) => {
+                    if (!a.createdAt && !b.createdAt) return 0;
+                    if (!a.createdAt) return 1;
+                    if (!b.createdAt) return -1;
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+                });
+                
+                // Create photo items for each image
+                allImages.forEach((item, globalIndex) => {
+                    const photoItem = document.createElement('div');
+                    photoItem.className = 'photo-item';
+                    photoItem.setAttribute('data-photo', item.image);
+                    
+                    // Format date if available
+                    let dateText = 'Delivered Car';
+                    if (item.createdAt) {
+                        try {
+                            const date = item.createdAt.toDate ? item.createdAt.toDate() : new Date(item.createdAt);
+                            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                            dateText = `Delivered: ${months[date.getMonth()]} ${date.getFullYear()}`;
+                        } catch (e) {
+                            // If date parsing fails, use as is
+                            if (typeof item.createdAt === 'string') {
+                                dateText = `Delivered: ${item.createdAt}`;
+                            }
+                        }
+                    }
+                    
+                    photoItem.innerHTML = `
+                        <img src="${item.image}" alt="${item.title} ${globalIndex + 1}" loading="lazy" onerror="this.src='pero.png'">
+                        <div class="photo-overlay">
+                            <div class="photo-title">${item.title}</div>
+                            <div class="photo-date">${dateText}</div>
+                        </div>
+                    `;
+                    
+                    photosGallery.appendChild(photoItem);
+                });
+                
+                console.log('Gallery photos loaded successfully from Firebase!');
+            } catch (error) {
+                console.error('Error loading gallery:', error);
+                photosGallery.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: #ff0844;">Error loading gallery photos. Please refresh the page.</div>';
+            }
+        }
+
         // Load personal info and cars when DOM is ready
         // Note: Banner loads immediately when Firebase initializes (above)
         window.addEventListener('DOMContentLoaded', () => {
             loadPersonalInfo();
             loadCars();
+            loadGallery();
         });
     </script>
 
@@ -2047,6 +2347,124 @@
         // Initialize stats animation
         animateStats();
 
+        // Lightbox functionality for delivered photos
+        let currentPhotoIndex = 0;
+        let photos = [];
+
+        // Initialize lightbox functionality
+        function initLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImage = document.getElementById('lightboxImage');
+            const lightboxClose = document.getElementById('lightboxClose');
+            const lightboxPrev = document.getElementById('lightboxPrev');
+            const lightboxNext = document.getElementById('lightboxNext');
+            
+            // Update photos array when gallery is loaded
+            function updatePhotosArray() {
+                photos = Array.from(document.querySelectorAll('.photo-item'));
+            }
+
+            // Open lightbox
+            function openLightbox(index) {
+                currentPhotoIndex = index;
+                updatePhotosArray();
+                updateLightboxImage();
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            // Close lightbox
+            function closeLightbox() {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            // Update lightbox image
+            function updateLightboxImage() {
+                if (photos[currentPhotoIndex]) {
+                    const img = photos[currentPhotoIndex].querySelector('img');
+                    if (img) {
+                        lightboxImage.src = img.src;
+                        lightboxImage.alt = img.alt;
+                    }
+                }
+            }
+
+            // Navigate to previous photo
+            function prevPhoto() {
+                updatePhotosArray();
+                currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
+                updateLightboxImage();
+            }
+
+            // Navigate to next photo
+            function nextPhoto() {
+                updatePhotosArray();
+                currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+                updateLightboxImage();
+            }
+
+            // Use event delegation for photo items (works with dynamically loaded images)
+            document.getElementById('photosGallery').addEventListener('click', (e) => {
+                const photoItem = e.target.closest('.photo-item');
+                if (photoItem) {
+                    updatePhotosArray();
+                    const index = photos.indexOf(photoItem);
+                    if (index !== -1) {
+                        openLightbox(index);
+                    }
+                }
+            });
+
+            // Close lightbox events
+            if (lightboxClose) {
+                lightboxClose.addEventListener('click', closeLightbox);
+            }
+            
+            if (lightbox) {
+                lightbox.addEventListener('click', (e) => {
+                    if (e.target === lightbox) {
+                        closeLightbox();
+                    }
+                });
+            }
+
+            // Navigation events
+            if (lightboxPrev) {
+                lightboxPrev.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    prevPhoto();
+                });
+            }
+
+            if (lightboxNext) {
+                lightboxNext.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    nextPhoto();
+                });
+            }
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (lightbox && lightbox.classList.contains('active')) {
+                    if (e.key === 'Escape') {
+                        closeLightbox();
+                    } else if (e.key === 'ArrowLeft') {
+                        prevPhoto();
+                    } else if (e.key === 'ArrowRight') {
+                        nextPhoto();
+                    }
+                }
+            });
+
+            // Make functions globally available for loadGallery to use
+            window.openLightbox = openLightbox;
+            window.updatePhotosArray = updatePhotosArray;
+        }
+
+        // Initialize lightbox when DOM is ready
+        initLightbox();
+
         // Intersection Observer for animations
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -2057,7 +2475,7 @@
             });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.bento-item, .seller-card, .message-container').forEach(el => {
+        document.querySelectorAll('.bento-item, .seller-card, .message-container, .photo-item').forEach(el => {
             el.style.opacity = '0';
             el.style.transform = 'translateY(50px)';
             el.style.transition = 'opacity 0.6s, transform 0.6s';
