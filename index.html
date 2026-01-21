@@ -1698,7 +1698,7 @@
                 padding: 0 30px;
                 text-align: left;
                 align-items: flex-start;
-                background-image: url('herwan.jpeg');
+                background-image: url('banner1.jpeg');
                 background-size: cover;
                 background-position: center;
                 background-repeat: no-repeat;
@@ -2196,28 +2196,6 @@
                             
                             bannerSlider.appendChild(slide);
                         });
-                        
-                        // Update mobile background with first image if available
-                        if (images[0]) {
-                            const heroLeft = document.querySelector('.hero-left');
-                            if (heroLeft) {
-                                // Update mobile view background
-                                const style = document.createElement('style');
-                                style.textContent = `
-                                    @media (max-width: 768px) {
-                                        .hero-left {
-                                            background-image: url('${images[0]}') !important;
-                                        }
-                                    }
-                                    @media (min-width: 769px) and (max-width: 1024px) {
-                                        .hero-left {
-                                            background-image: url('${images[0]}') !important;
-                                        }
-                                    }
-                                `;
-                                document.head.appendChild(style);
-                            }
-                        }
                         
                         // Reinitialize banner slider after images are loaded
                         setTimeout(() => {
