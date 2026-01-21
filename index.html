@@ -574,11 +574,27 @@
             padding: 40px;
             position: relative;
             overflow: hidden;
-            transition: all 0.3s;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 40px;
             align-items: center;
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.8s ease, box-shadow 0.3s ease;
+            transition-delay: var(--anim-delay, 0s);
+        }
+
+        .bento-item:nth-child(even) {
+            transform: translateX(100px);
+        }
+
+        .bento-item.in-view {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .bento-item.in-view:nth-child(even) {
+            transform: translateX(0);
         }
 
         .bento-item:hover {
@@ -661,6 +677,15 @@
         @media (max-width: 768px) {
             .bento-item {
                 grid-template-columns: 1fr;
+                transform: translateY(50px);
+            }
+
+            .bento-item:nth-child(even) {
+                transform: translateY(50px);
+            }
+
+            .bento-item.in-view {
+                transform: translateY(0);
             }
             
             .car-icon {
@@ -2049,6 +2074,39 @@
             }
         }
 
+        // Animate car cards on scroll with slide effect
+        let carObserver;
+        function observeCarCards() {
+            const cards = document.querySelectorAll('.bento-item');
+            
+            // Fallback for older browsers: just show cards
+            if (!('IntersectionObserver' in window)) {
+                cards.forEach(card => card.classList.add('in-view'));
+                return;
+            }
+            
+            if (carObserver) carObserver.disconnect();
+            
+            carObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                        carObserver.unobserve(entry.target);
+                    }
+                });
+            }, { 
+                threshold: 0.15,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            
+            cards.forEach(card => {
+                if (!card.dataset.observed) {
+                    card.dataset.observed = 'true';
+                    carObserver.observe(card);
+                }
+            });
+        }
+
         // Load cars from Firebase
         async function loadCars() {
             const carsGrid = document.getElementById('carsGrid');
@@ -2063,7 +2121,7 @@
 
                 carsGrid.innerHTML = ''; // Clear loading message
                 
-                querySnapshot.forEach((doc) => {
+                querySnapshot.forEach((doc, index) => {
                     const car = doc.data();
                     const carName = car.name || 'Unknown';
                     const carPrice = car.price || '0';
@@ -2074,6 +2132,7 @@
                     // Create car card
                     const carCard = document.createElement('div');
                     carCard.className = 'bento-item';
+                    carCard.style.setProperty('--anim-delay', `${index * 80}ms`);
                     
                     // Build features list
                     let featuresHTML = '';
@@ -2104,6 +2163,7 @@
                     carsGrid.appendChild(carCard);
                 });
                 
+                observeCarCards();
                 console.log('Cars loaded successfully from Firebase!');
             } catch (error) {
                 console.error('Error loading cars:', error);
@@ -2474,7 +2534,7 @@
         // Initialize lightbox when DOM is ready
         initLightbox();
 
-        // Intersection Observer for animations
+        // Intersection Observer for other animations (not bento-item, handled separately)
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -2484,7 +2544,8 @@
             });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.bento-item, .seller-card, .message-container, .photo-item').forEach(el => {
+        // Only observe non-bento-item elements to avoid conflicts
+        document.querySelectorAll('.seller-card, .message-container, .photo-item').forEach(el => {
             el.style.opacity = '0';
             el.style.transform = 'translateY(50px)';
             el.style.transition = 'opacity 0.6s, transform 0.6s';
