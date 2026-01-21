@@ -728,6 +728,13 @@
             margin-bottom: 5px;
         }
 
+        .photo-description {
+            font-size: 13px;
+            opacity: 0.9;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
         .photo-date {
             font-size: 12px;
             opacity: 0.9;
@@ -1714,7 +1721,7 @@
         <div class="section-header">
             <span class="section-tag">SUCCESS STORIES</span>
             <h2 class="section-title">Cars Delivered</h2>
-            <p style="font-size: 18px; color: #666; max-width: 600px; margin: 0 auto; text-align: center;">Click on any photo to view in full size</p>
+            <p style="font-size: 18px; color: #666; max-width: 600px; text-align: left; line-height: 1.6; margin-top: 10px;">A collection of all the cars we've successfully delivered to our satisfied customers. Each vehicle represents a journey completed and a dream fulfilled.</p>
         </div>
         <div class="photos-gallery" id="photosGallery">
             <!-- Photos will be loaded from Firebase -->
@@ -2121,14 +2128,20 @@
                 querySnapshot.forEach((doc) => {
                     const galleryData = doc.data();
                     const images = galleryData.images || [];
+                    const descriptions = galleryData.descriptions || []; // Array of descriptions per image
+                    const description = galleryData.description || ''; // Single description for all images
                     const createdAt = galleryData.createdAt || null;
                     const title = galleryData.title || galleryData.carModel || 'Delivered Car';
                     
                     // Add each image with metadata
                     images.forEach((imageData, index) => {
+                        // Use per-image description if available, otherwise use document-level description
+                        const imageDescription = descriptions[index] || description || '';
+                        
                         allImages.push({
                             image: imageData,
                             title: title,
+                            description: imageDescription,
                             createdAt: createdAt,
                             docId: doc.id,
                             index: index
@@ -2150,25 +2163,18 @@
                     photoItem.className = 'photo-item';
                     photoItem.setAttribute('data-photo', item.image);
                     
-                    // Format date if available
-                    let dateText = 'Delivered Car';
-                    if (item.createdAt) {
-                        try {
-                            const date = item.createdAt.toDate ? item.createdAt.toDate() : new Date(item.createdAt);
-                            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                            dateText = `Delivered: ${months[date.getMonth()]} ${date.getFullYear()}`;
-                        } catch (e) {
-                            // If date parsing fails, use as is
-                            if (typeof item.createdAt === 'string') {
-                                dateText = `Delivered: ${item.createdAt}`;
-                            }
-                        }
-                    }
+                    // Just show "Delivered" without date
+                    const dateText = 'Delivered';
+                    
+                    // Build description HTML if available
+                    const descriptionHTML = item.description ? 
+                        `<div class="photo-description">${item.description}</div>` : '';
                     
                     photoItem.innerHTML = `
                         <img src="${item.image}" alt="${item.title} ${globalIndex + 1}" loading="lazy" onerror="this.src='pero.png'">
                         <div class="photo-overlay">
                             <div class="photo-title">${item.title}</div>
+                            ${descriptionHTML}
                             <div class="photo-date">${dateText}</div>
                         </div>
                     `;
