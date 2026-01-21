@@ -561,12 +561,21 @@
             background: #f5f5f0;
         }
 
+        .banner-slide {
+            cursor: pointer;
+        }
+
         .banner-slide img {
             max-width: 100%;
             height: auto;
             display: block;
             object-fit: contain;
             margin: 0 auto;
+            transition: transform 0.3s ease;
+        }
+
+        .banner-slide:hover img {
+            transform: scale(1.05);
         }
 
         .banner-slider-dots {
@@ -1846,14 +1855,10 @@
         <!-- Banner Slider Section -->
         <div class="banner-slider-section">
             <div class="banner-slider-container" id="bannerSlider">
-                <div class="banner-slide">
-                    <img src="banner1.jpeg" alt="Banner 1">
-                </div>
-                <div class="banner-slide">
-                    <img src="pero.png" alt="Banner 2">
-                </div>
-                <div class="banner-slide">
-                    <img src="herwan.jpeg" alt="Banner 3">
+                <!-- Banner slides will be loaded from database -->
+                <div style="text-align: center; padding: 60px; color: #666;">
+                    <div style="font-size: 48px; margin-bottom: 20px;">🖼️</div>
+                    <div>Loading banners from database...</div>
                 </div>
             </div>
             <button class="banner-slider-nav prev" id="bannerPrev">‹</button>
@@ -2156,8 +2161,247 @@
             }
         }
 
+        // Store banner images globally for lightbox navigation
+        window.bannerImages = [];
+
+        // Load banner images from Firebase
+        async function loadBannerImages() {
+            const bannerSlider = document.getElementById('bannerSlider');
+            
+            try {
+                const bannerImageDoc = await getDoc(doc(db, 'admin', 'bannerImage'));
+                
+                if (bannerImageDoc.exists()) {
+                    const bannerImageData = bannerImageDoc.data();
+                    const images = bannerImageData.images || [];
+                    
+                    if (images.length > 0) {
+                        // Store images globally for lightbox
+                        window.bannerImages = images;
+                        
+                        // Clear loading message
+                        bannerSlider.innerHTML = '';
+                        
+                        // Create slides for each image
+                        images.forEach((imageUrl, index) => {
+                            const slide = document.createElement('div');
+                            slide.className = 'banner-slide';
+                            slide.setAttribute('data-banner-index', index);
+                            slide.innerHTML = `<img src="${imageUrl}" alt="Banner ${index + 1}" onerror="this.src='pero.png'">`;
+                            
+                            // Add click event to open in lightbox
+                            slide.addEventListener('click', () => {
+                                openBannerLightbox(index);
+                            });
+                            
+                            bannerSlider.appendChild(slide);
+                        });
+                        
+                        // Update mobile background with first image if available
+                        if (images[0]) {
+                            const heroLeft = document.querySelector('.hero-left');
+                            if (heroLeft) {
+                                // Update mobile view background
+                                const style = document.createElement('style');
+                                style.textContent = `
+                                    @media (max-width: 768px) {
+                                        .hero-left {
+                                            background-image: url('${images[0]}') !important;
+                                        }
+                                    }
+                                    @media (min-width: 769px) and (max-width: 1024px) {
+                                        .hero-left {
+                                            background-image: url('${images[0]}') !important;
+                                        }
+                                    }
+                                `;
+                                document.head.appendChild(style);
+                            }
+                        }
+                        
+                        // Reinitialize banner slider after images are loaded
+                        setTimeout(() => {
+                            initBannerSlider();
+                        }, 100);
+                        
+                        console.log('Banner images loaded successfully from Firebase!');
+                    } else {
+                        // Fallback to default images if no images in database
+                        setDefaultBanners();
+                    }
+                } else {
+                    console.log('BannerImage document not found in Firebase');
+                    setDefaultBanners();
+                }
+            } catch (error) {
+                console.error('Error loading banner images:', error);
+                setDefaultBanners();
+            }
+        }
+        
+        // Set default banners as fallback
+        function setDefaultBanners() {
+            const bannerSlider = document.getElementById('bannerSlider');
+            const defaultImages = ['banner1.jpeg', 'pero.png', 'herwan.jpeg'];
+            window.bannerImages = defaultImages;
+            
+            bannerSlider.innerHTML = '';
+            
+            defaultImages.forEach((imageUrl, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'banner-slide';
+                slide.setAttribute('data-banner-index', index);
+                slide.innerHTML = `<img src="${imageUrl}" alt="Banner ${index + 1}" onerror="this.src='pero.png'">`;
+                
+                // Add click event to open in lightbox
+                slide.addEventListener('click', () => {
+                    openBannerLightbox(index);
+                });
+                
+                bannerSlider.appendChild(slide);
+            });
+            
+            setTimeout(() => {
+                initBannerSlider();
+            }, 100);
+        }
+        
+        // Open banner image in lightbox
+        function openBannerLightbox(index) {
+            if (!window.bannerImages || window.bannerImages.length === 0) return;
+            
+            // Set current photo index for banner images
+            window.currentBannerIndex = index;
+            window.isBannerLightbox = true;
+            
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImage = document.getElementById('lightboxImage');
+            
+            if (lightbox && lightboxImage && window.bannerImages[index]) {
+                lightboxImage.src = window.bannerImages[index];
+                lightboxImage.alt = `Banner ${index + 1}`;
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        
+        // Navigate banner lightbox
+        function navigateBannerLightbox(direction) {
+            if (!window.bannerImages || window.bannerImages.length === 0) return;
+            
+            if (direction === 'next') {
+                window.currentBannerIndex = (window.currentBannerIndex + 1) % window.bannerImages.length;
+            } else {
+                window.currentBannerIndex = (window.currentBannerIndex - 1 + window.bannerImages.length) % window.bannerImages.length;
+            }
+            
+            const lightboxImage = document.getElementById('lightboxImage');
+            if (lightboxImage && window.bannerImages[window.currentBannerIndex]) {
+                lightboxImage.src = window.bannerImages[window.currentBannerIndex];
+                lightboxImage.alt = `Banner ${window.currentBannerIndex + 1}`;
+            }
+        }
+        
+        // Initialize banner slider functionality
+        function initBannerSlider() {
+            const slider = document.getElementById('bannerSlider');
+            const prevBtn = document.getElementById('bannerPrev');
+            const nextBtn = document.getElementById('bannerNext');
+            const dotsContainer = document.getElementById('bannerDots');
+            const slides = document.querySelectorAll('.banner-slide');
+            
+            if (!slider || slides.length === 0) return;
+            
+            // Clear existing dots
+            dotsContainer.innerHTML = '';
+            
+            let currentSlide = 0;
+            let autoSlideInterval;
+            
+            // Create dots
+            slides.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = 'banner-dot';
+                if (index === 0) dot.classList.add('active');
+                dot.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    goToSlide(index);
+                });
+                dotsContainer.appendChild(dot);
+            });
+            
+            function updateSlider() {
+                slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+                
+                // Update dots
+                document.querySelectorAll('.banner-dot').forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentSlide);
+                });
+            }
+            
+            function goToSlide(index) {
+                currentSlide = index;
+                if (currentSlide >= slides.length) currentSlide = 0;
+                if (currentSlide < 0) currentSlide = slides.length - 1;
+                updateSlider();
+                resetAutoSlide();
+            }
+            
+            function nextSlide() {
+                currentSlide++;
+                if (currentSlide >= slides.length) currentSlide = 0;
+                updateSlider();
+                resetAutoSlide();
+            }
+            
+            function prevSlide() {
+                currentSlide--;
+                if (currentSlide < 0) currentSlide = slides.length - 1;
+                updateSlider();
+                resetAutoSlide();
+            }
+            
+            function startAutoSlide() {
+                autoSlideInterval = setInterval(nextSlide, 4000);
+            }
+            
+            function resetAutoSlide() {
+                clearInterval(autoSlideInterval);
+                startAutoSlide();
+            }
+            
+            // Remove existing event listeners by cloning and replacing
+            const newPrevBtn = prevBtn.cloneNode(true);
+            const newNextBtn = nextBtn.cloneNode(true);
+            prevBtn.parentNode.replaceChild(newPrevBtn, prevBtn);
+            nextBtn.parentNode.replaceChild(newNextBtn, nextBtn);
+            
+            // Add event listeners (stop propagation to prevent lightbox)
+            newPrevBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                prevSlide();
+            });
+            newNextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                nextSlide();
+            });
+            
+            // Pause on hover
+            const bannerSection = document.querySelector('.banner-slider-section');
+            if (bannerSection) {
+                bannerSection.addEventListener('mouseenter', () => {
+                    clearInterval(autoSlideInterval);
+                });
+                bannerSection.addEventListener('mouseleave', startAutoSlide);
+            }
+            
+            // Start auto-slide
+            startAutoSlide();
+        }
+
         // Load banner immediately when Firebase is ready (before DOM loads)
         loadBanner();
+        loadBannerImages();
 
         // Load personal info from Firebase
         async function loadPersonalInfo() {
@@ -2566,6 +2810,7 @@
 
             // Open lightbox
             function openLightbox(index) {
+                window.isBannerLightbox = false; // Reset flag for gallery photos
                 currentPhotoIndex = index;
                 updatePhotosArray();
                 updateLightboxImage();
@@ -2592,6 +2837,12 @@
 
             // Navigate to previous photo
             function prevPhoto() {
+                // Check if we're viewing banner images
+                if (window.isBannerLightbox && window.bannerImages) {
+                    navigateBannerLightbox('prev');
+                    return;
+                }
+                
                 updatePhotosArray();
                 currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
                 updateLightboxImage();
@@ -2599,6 +2850,12 @@
 
             // Navigate to next photo
             function nextPhoto() {
+                // Check if we're viewing banner images
+                if (window.isBannerLightbox && window.bannerImages) {
+                    navigateBannerLightbox('next');
+                    return;
+                }
+                
                 updatePhotosArray();
                 currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
                 updateLightboxImage();
@@ -2618,12 +2875,16 @@
 
             // Close lightbox events
             if (lightboxClose) {
-                lightboxClose.addEventListener('click', closeLightbox);
+                lightboxClose.addEventListener('click', () => {
+                    window.isBannerLightbox = false;
+                    closeLightbox();
+                });
             }
             
             if (lightbox) {
                 lightbox.addEventListener('click', (e) => {
                     if (e.target === lightbox) {
+                        window.isBannerLightbox = false;
                         closeLightbox();
                     }
                 });
@@ -2648,6 +2909,7 @@
             document.addEventListener('keydown', (e) => {
                 if (lightbox && lightbox.classList.contains('active')) {
                     if (e.key === 'Escape') {
+                        window.isBannerLightbox = false;
                         closeLightbox();
                     } else if (e.key === 'ArrowLeft') {
                         prevPhoto();
@@ -2665,84 +2927,7 @@
         // Initialize lightbox when DOM is ready
         initLightbox();
 
-        // Banner Slider Auto-Slide
-        (function() {
-            const slider = document.getElementById('bannerSlider');
-            const prevBtn = document.getElementById('bannerPrev');
-            const nextBtn = document.getElementById('bannerNext');
-            const dotsContainer = document.getElementById('bannerDots');
-            const slides = document.querySelectorAll('.banner-slide');
-            
-            if (!slider || slides.length === 0) return;
-            
-            let currentSlide = 0;
-            let autoSlideInterval;
-            
-            // Create dots
-            slides.forEach((_, index) => {
-                const dot = document.createElement('div');
-                dot.className = 'banner-dot';
-                if (index === 0) dot.classList.add('active');
-                dot.addEventListener('click', () => goToSlide(index));
-                dotsContainer.appendChild(dot);
-            });
-            
-            function updateSlider() {
-                slider.style.transform = `translateX(-${currentSlide * 100}%)`;
-                
-                // Update dots
-                document.querySelectorAll('.banner-dot').forEach((dot, index) => {
-                    dot.classList.toggle('active', index === currentSlide);
-                });
-            }
-            
-            function goToSlide(index) {
-                currentSlide = index;
-                if (currentSlide >= slides.length) currentSlide = 0;
-                if (currentSlide < 0) currentSlide = slides.length - 1;
-                updateSlider();
-                resetAutoSlide();
-            }
-            
-            function nextSlide() {
-                currentSlide++;
-                if (currentSlide >= slides.length) currentSlide = 0;
-                updateSlider();
-                resetAutoSlide();
-            }
-            
-            function prevSlide() {
-                currentSlide--;
-                if (currentSlide < 0) currentSlide = slides.length - 1;
-                updateSlider();
-                resetAutoSlide();
-            }
-            
-            function startAutoSlide() {
-                autoSlideInterval = setInterval(nextSlide, 4000); // Change slide every 4 seconds
-            }
-            
-            function resetAutoSlide() {
-                clearInterval(autoSlideInterval);
-                startAutoSlide();
-            }
-            
-            // Event listeners
-            if (nextBtn) nextBtn.addEventListener('click', nextSlide);
-            if (prevBtn) prevBtn.addEventListener('click', prevSlide);
-            
-            // Pause on hover
-            const bannerSection = document.querySelector('.banner-slider-section');
-            if (bannerSection) {
-                bannerSection.addEventListener('mouseenter', () => {
-                    clearInterval(autoSlideInterval);
-                });
-                bannerSection.addEventListener('mouseleave', startAutoSlide);
-            }
-            
-            // Start auto-slide
-            startAutoSlide();
-        })();
+        // Banner slider is now initialized by loadBannerImages() function
 
         // Intersection Observer for other animations (not bento-item, handled separately)
         const observer = new IntersectionObserver((entries) => {
