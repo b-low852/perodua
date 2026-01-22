@@ -1698,10 +1698,6 @@
                 padding: 0 30px;
                 text-align: left;
                 align-items: flex-start;
-                background-image: url('banner1.jpeg');
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
                 position: relative;
             }
 
@@ -2144,6 +2140,29 @@
                     const subtitleElement = document.getElementById('heroSubtitle');
                     if (subtitleElement && bannerData.subtitle) {
                         subtitleElement.textContent = bannerData.subtitle;
+                    }
+                    
+                    // Update background image for hero-left section (mobile only)
+                    const heroLeftElement = document.querySelector('.hero-left');
+                    if (heroLeftElement && bannerData.backgroundImage) {
+                        // Function to apply background image only on mobile
+                        function applyMobileBackground() {
+                            if (window.innerWidth <= 768) {
+                                heroLeftElement.style.backgroundImage = `url(${bannerData.backgroundImage})`;
+                                heroLeftElement.style.backgroundSize = 'cover';
+                                heroLeftElement.style.backgroundPosition = 'center';
+                                heroLeftElement.style.backgroundRepeat = 'no-repeat';
+                            } else {
+                                // Remove background image on desktop
+                                heroLeftElement.style.backgroundImage = '';
+                            }
+                        }
+                        
+                        // Apply on load
+                        applyMobileBackground();
+                        
+                        // Re-apply on window resize
+                        window.addEventListener('resize', applyMobileBackground);
                     }
                     
                     console.log('Banner data loaded successfully from Firebase!');
