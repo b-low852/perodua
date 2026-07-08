@@ -1119,6 +1119,11 @@
             position: relative;
             overflow: hidden;
         }
+        @media (max-width: 768px) {
+            .seller-float {
+                overflow: visible;
+            }
+        }
         .seller-float::before {
             content: '';
             position: absolute; inset: 0;
@@ -1535,17 +1540,15 @@
         }
 
         @media (min-width: 769px) and (max-width: 1024px) {
-            .hero-left {
-                background-image: url('herwan.jpeg');
-                background-size: cover;
-                background-position: center;
-            }
             .hero-left::after {
                 content: '';
                 position: absolute; inset: 0;
                 background: rgba(0,0,0,0.72);
                 z-index: 0;
+                opacity: 0;
+                transition: opacity 0.4s ease;
             }
+            .hero-left.bg-loaded::after { opacity: 1; }
             .hero-left > * { position: relative; z-index: 1; }
         }
 
@@ -1573,9 +1576,9 @@
 
             .hero-left {
                 padding: 110px 28px 70px;
-                background-image: url('herwan.jpeg');
                 background-size: cover;
                 background-position: center;
+                background-repeat: no-repeat;
                 min-height: 100vh;
                 position: relative;
             }
@@ -1584,7 +1587,10 @@
                 position: absolute; inset: 0;
                 background: rgba(0,0,0,0.76);
                 z-index: 0;
+                opacity: 0;
+                transition: opacity 0.4s ease;
             }
+            .hero-left.bg-loaded::after { opacity: 1; }
             .hero-left > * { position: relative; z-index: 1; }
             .hero-title { font-size: 44px; }
             .hero-scroll-indicator { display: none; }
@@ -1603,9 +1609,17 @@
             .car-icon { height: 230px; }
             .car-name-bento { font-size: 36px; }
 
-            .seller-card { grid-template-columns: 1fr; padding: 36px 22px; text-align: center; }
-            .seller-stats { grid-template-columns: repeat(3,1fr); gap: 10px; }
-            .seller-perks { grid-template-columns: 1fr 1fr; }
+            .seller-float { padding: 60px 16px; }
+            .seller-card { grid-template-columns: 1fr; padding: 28px 20px; text-align: center; width: 100%; box-sizing: border-box; }
+            .seller-avatar-large { width: 160px; height: 160px; margin-bottom: 16px; }
+            .seller-name { font-size: 22px; }
+            .seller-stats { grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
+            .stat-box { padding: 14px 8px; }
+            .stat-box .stat-number { font-size: 22px; }
+            .stat-box .stat-label { font-size: 9px; letter-spacing: 0.8px; }
+            .seller-perks { grid-template-columns: 1fr; gap: 8px; }
+            .perk-item { padding: 12px; font-size: 14px; }
+            .seller-details { text-align: left; }
 
             .form-grid { grid-template-columns: 1fr; }
             .form-field.full { grid-column: span 1; }
@@ -2027,28 +2041,43 @@
                     if (subtitleEl && bannerData.subtitle) subtitleEl.textContent = bannerData.subtitle;
 
                     const heroLeftEl = document.querySelector('.hero-left');
-                    if (heroLeftEl && bannerData.backgroundImage) {
-                        function applyMobileBackground() {
-                            if (window.innerWidth <= 768) {
-                                heroLeftEl.style.backgroundImage = `url(${bannerData.backgroundImage})`;
-                                heroLeftEl.style.backgroundSize = 'cover';
-                                heroLeftEl.style.backgroundPosition = 'center';
-                                heroLeftEl.style.backgroundRepeat = 'no-repeat';
-                            } else {
-                                heroLeftEl.style.backgroundImage = '';
-                            }
+                    const bgUrl = bannerData.backgroundImage || 'herwan.jpeg';
+                    function applyMobileBackground() {
+                        if (window.innerWidth <= 1024) {
+                            const img = new Image();
+                            img.onload = () => {
+                                heroLeftEl.style.backgroundImage = `url(${bgUrl})`;
+                                heroLeftEl.classList.add('bg-loaded');
+                            };
+                            img.src = bgUrl;
+                        } else {
+                            heroLeftEl.style.backgroundImage = '';
+                            heroLeftEl.classList.remove('bg-loaded');
                         }
-                        applyMobileBackground();
-                        window.addEventListener('resize', applyMobileBackground);
                     }
+                    applyMobileBackground();
+                    window.addEventListener('resize', applyMobileBackground);
                 } else {
                     document.getElementById('heroTitle').textContent = 'Drive Your Dream Perodua Today';
                     document.getElementById('heroSubtitle').textContent = "Experience excellence with Malaysia's #1 car brand. Premium quality, unbeatable prices, exceptional service.";
+                    applyFallbackBg();
                 }
             } catch (error) {
                 document.getElementById('heroTitle').textContent = 'Drive Your Dream Perodua Today';
                 document.getElementById('heroSubtitle').textContent = "Experience excellence with Malaysia's #1 car brand. Premium quality, unbeatable prices, exceptional service.";
+                applyFallbackBg();
             }
+        }
+
+        function applyFallbackBg() {
+            if (window.innerWidth > 1024) return;
+            const heroLeftEl = document.querySelector('.hero-left');
+            const img = new Image();
+            img.onload = () => {
+                heroLeftEl.style.backgroundImage = `url(herwan.jpeg)`;
+                heroLeftEl.classList.add('bg-loaded');
+            };
+            img.src = 'herwan.jpeg';
         }
 
         window.bannerImages = [];
