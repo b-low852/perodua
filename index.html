@@ -2053,7 +2053,7 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, getDoc, setDoc, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
 
         const firebaseConfig = {
@@ -2076,6 +2076,58 @@
         window.firestoreGetDocs = getDocs;
         window.firestoreDoc = doc;
         window.firestoreGetDoc = getDoc;
+
+        function detectLinkType(href) {
+            if (!href) return null;
+            const url = href.toLowerCase();
+            if (url.includes('wa.me') || url.includes('whatsapp.com') || url.includes('api.whatsapp.com')) return 'whatsapp';
+            if (url.startsWith('tel:')) return 'phone';
+            if (url.startsWith('mailto:')) return 'email';
+            if (url.includes('facebook.com')) return 'facebook';
+            if (url.includes('tiktok.com')) return 'tiktok';
+            if (url.startsWith('#')) return 'internal';
+            if (url.startsWith('http://') || url.startsWith('https://')) return 'website';
+            return null;
+        }
+
+        async function trackLinkClick(linkType) {
+            const safeType = (linkType || 'website').toString().trim().toLowerCase().replace(/[^a-z0-9_-]/g, '') || 'website';
+            try {
+                await setDoc(doc(db, 'admin', 'analytics'), {
+                    linkClicks: increment(1),
+                    [`clicks.${safeType}`]: increment(1),
+                    updatedAt: serverTimestamp()
+                }, { merge: true });
+            } catch (error) {
+                console.error('Failed to track link click:', error);
+            }
+        }
+
+        async function trackPageVisit() {
+            if (sessionStorage.getItem('perodua_visit_tracked')) return;
+            sessionStorage.setItem('perodua_visit_tracked', '1');
+            try {
+                await setDoc(doc(db, 'admin', 'analytics'), {
+                    pageViews: increment(1),
+                    lastVisitAt: serverTimestamp(),
+                    updatedAt: serverTimestamp()
+                }, { merge: true });
+            } catch (error) {
+                console.error('Failed to track page visit:', error);
+            }
+        }
+
+        document.addEventListener('click', (event) => {
+            const link = event.target.closest('a[href]');
+            if (!link) return;
+            const href = link.getAttribute('href') || '';
+            const linkType = link.getAttribute('data-track-link') || detectLinkType(href);
+            if (!linkType) return;
+            trackLinkClick(linkType);
+        }, true);
+
+        window.trackLinkClick = trackLinkClick;
+        trackPageVisit();
 
         async function loadBanner() {
             try {
@@ -2623,7 +2675,10 @@
 
             document.getElementById('successPopup').classList.add('show');
             document.getElementById('contactForm').reset();
-            setTimeout(() => { window.open(`https://wa.me/60145818881?text=${whatsappMsg}`, '_blank'); }, 1500);
+            setTimeout(() => {
+                if (window.trackLinkClick) window.trackLinkClick('whatsapp');
+                window.open(`https://wa.me/60145818881?text=${whatsappMsg}`, '_blank');
+            }, 1500);
         });
 
         function closeSuccessPopup() { document.getElementById('successPopup').classList.remove('show'); }
