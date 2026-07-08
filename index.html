@@ -7,6 +7,12 @@
     <link rel="icon" type="image/png" href="lo.png">
     <link rel="shortcut icon" type="image/png" href="lo.png">
     <link rel="apple-touch-icon" href="lo.png">
+    <!-- Resource hints for faster connections -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://firestore.googleapis.com">
+    <link rel="preconnect" href="https://www.gstatic.com">
+    <link rel="preload" href="lo.png" as="image">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://herwanperodua.vercel.app/">
     <meta property="og:title" content="Perodua - Your Dream Car Awaits">
@@ -19,7 +25,7 @@
     <meta name="twitter:title" content="Perodua - Your Dream Car Awaits">
     <meta name="twitter:description" content="PERODUA OTOSTABIL SDN BHD - Your trusted Perodua dealer in Bintulu, Sarawak.">
     <meta name="twitter:image" content="https://herwanperodua.vercel.app/pero.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -1529,6 +1535,49 @@
         .sr-delay-2 { transition-delay: 0.2s; }
         .sr-delay-3 { transition-delay: 0.3s; }
 
+        /* ===== MOBILE PERFORMANCE ===== */
+        @media (max-width: 768px) {
+            /* Kill expensive animations and effects on mobile */
+            .hero-blobs,
+            .hero-particles,
+            .hero-grid { display: none; }
+
+            .hero-car-display::before,
+            .hero-car-display::after { display: none; }
+
+            .hero-car-display img { animation: none; }
+
+            .blob, .hparticle { display: none; }
+
+            /* Remove backdrop-filter (GPU intensive) */
+            .floating-nav.scrolled,
+            .contact-sidebar,
+            .seller-card,
+            .success-popup-content {
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+            }
+
+            /* Simplify nav scrolled state */
+            .floating-nav.scrolled { background: rgba(255,255,255,0.97); }
+
+            /* Reduce transition durations */
+            .bento-item { transition: opacity 0.5s ease, transform 0.5s ease; }
+
+            /* Disable non-essential hover animations */
+            .stat-item:hover { transform: none; box-shadow: none; }
+            .photo-item:hover { transform: scale(1.02); }
+        }
+
+        /* Respect reduced motion preference */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 1200px) {
             .hero-split { grid-template-columns: 1fr; }
@@ -2332,11 +2381,17 @@
 
     <script>
         /* ===== PAGE LOADER ===== */
+        /* Hide immediately on mobile (faster feel), small delay on desktop */
+        const isMobile = window.innerWidth <= 768;
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('pageLoader').classList.add('hidden');
-            }, 1000);
+            }, isMobile ? 400 : 900);
         });
+        /* Fallback: hide loader after 3s regardless */
+        setTimeout(() => {
+            document.getElementById('pageLoader').classList.add('hidden');
+        }, 3000);
 
         /* ===== SCROLL PROGRESS BAR ===== */
         window.addEventListener('scroll', () => {
@@ -2350,39 +2405,34 @@
             mainNav.classList.toggle('scrolled', window.scrollY > 60);
         }, { passive: true });
 
-        /* ===== CUSTOM CURSOR ===== */
-        const cursorDot = document.getElementById('cursorDot');
-        const cursorRing = document.getElementById('cursorRing');
-        let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+        /* ===== CUSTOM CURSOR (desktop only) ===== */
+        if (!isMobile) {
+            const cursorDot = document.getElementById('cursorDot');
+            const cursorRing = document.getElementById('cursorRing');
+            let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
 
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            cursorDot.style.left = mouseX + 'px';
-            cursorDot.style.top = mouseY + 'px';
-        });
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                cursorDot.style.left = mouseX + 'px';
+                cursorDot.style.top = mouseY + 'px';
+            }, { passive: true });
 
-        // Smooth ring follow
-        function animateRing() {
-            ringX += (mouseX - ringX) * 0.12;
-            ringY += (mouseY - ringY) * 0.12;
-            cursorRing.style.left = ringX + 'px';
-            cursorRing.style.top = ringY + 'px';
-            requestAnimationFrame(animateRing);
+            function animateRing() {
+                ringX += (mouseX - ringX) * 0.12;
+                ringY += (mouseY - ringY) * 0.12;
+                cursorRing.style.left = ringX + 'px';
+                cursorRing.style.top = ringY + 'px';
+                requestAnimationFrame(animateRing);
+            }
+            animateRing();
+
+            document.querySelectorAll('a, button, .photo-item, .bento-item, .contact-icon, .stat-item, .perk-item, .stat-box').forEach(el => {
+                el.addEventListener('mouseenter', () => { cursorDot.classList.add('hovering'); cursorRing.classList.add('hovering'); });
+                el.addEventListener('mouseleave', () => { cursorDot.classList.remove('hovering'); cursorRing.classList.remove('hovering'); });
+            });
         }
-        animateRing();
 
-        // Cursor hover state
-        document.querySelectorAll('a, button, .photo-item, .bento-item, .contact-icon, .stat-item, .perk-item, .stat-box').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursorDot.classList.add('hovering');
-                cursorRing.classList.add('hovering');
-            });
-            el.addEventListener('mouseleave', () => {
-                cursorDot.classList.remove('hovering');
-                cursorRing.classList.remove('hovering');
-            });
-        });
 
         /* ===== SMOOTH SCROLL ===== */
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -2415,15 +2465,23 @@
             });
         }
 
-        /* ===== HERO PARALLAX (profile image) ===== */
-        document.addEventListener('mousemove', (e) => {
-            const heroDisplay = document.querySelector('.hero-car-display');
-            if (heroDisplay && window.innerWidth > 768) {
-                const x = (e.clientX / window.innerWidth - 0.5) * 14;
-                const y = (e.clientY / window.innerHeight - 0.5) * 14;
-                heroDisplay.style.transform = `translate(${x}px, ${y}px)`;
-            }
-        });
+        /* ===== HERO PARALLAX (desktop only) ===== */
+        if (!isMobile) {
+            document.addEventListener('mousemove', (e) => {
+                const heroDisplay = document.querySelector('.hero-car-display');
+                if (heroDisplay) {
+                    const x = (e.clientX / window.innerWidth - 0.5) * 14;
+                    const y = (e.clientY / window.innerHeight - 0.5) * 14;
+                    heroDisplay.style.transform = `translate(${x}px, ${y}px)`;
+                }
+                document.querySelectorAll('.hero-title-line').forEach((line, i) => {
+                    const depth = (i + 1) * 4;
+                    const x = (e.clientX / window.innerWidth - 0.5) * depth;
+                    const y = (e.clientY / window.innerHeight - 0.5) * depth;
+                    line.style.transform = `translate(${x}px, ${y}px)`;
+                });
+            }, { passive: true });
+        }
 
         /* ===== STATS COUNTER ANIMATION ===== */
         function animateStats() {
