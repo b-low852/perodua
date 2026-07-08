@@ -2095,9 +2095,7 @@
             try {
                 await setDoc(doc(db, 'admin', 'analytics'), {
                     linkClicks: increment(1),
-                    clicks: {
-                        [safeType]: increment(1)
-                    },
+                    [`clicks.${safeType}`]: increment(1),
                     updatedAt: serverTimestamp()
                 }, { merge: true });
             } catch (error) {
